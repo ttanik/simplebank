@@ -10,7 +10,7 @@ import (
 
 func createRandomEntry(t *testing.T) Entry {
 	arg := CreateEntryParams{
-		AccountID: util.RandomInt(1, 8),
+		AccountID: util.RandomInt(1, 2),
 		Amount:    util.RandomMoney(),
 	}
 	entry, err := testQueries.CreateEntry(context.Background(), arg)
@@ -72,14 +72,14 @@ func TestListEntries(t *testing.T) {
 func TestListEntriesByAccount(t *testing.T) {
 	for i := 0; i < 10; i++ {
 		arg := CreateEntryParams{
-			AccountID: int64(5),
+			AccountID: int64(2),
 			Amount:    util.RandomMoney(),
 		}
 		_, err := testQueries.CreateEntry(context.Background(), arg)
 		assert.Nil(t, err)
 	}
 	arg := ListEntriesByAccountParams{
-		AccountID: int64(5),
+		AccountID: int64(2),
 		Limit:     5,
 		Offset:    5,
 	}
@@ -87,22 +87,22 @@ func TestListEntriesByAccount(t *testing.T) {
 	assert.NoError(t, err)
 	for _, account := range accounts {
 		assert.NotEmpty(t, account)
-		assert.Equal(t, int64(5), account.AccountID)
+		assert.Equal(t, int64(2), account.AccountID)
 	}
 }
 
 func TestDeleteEntryByAccount(t *testing.T) {
 	for i := 0; i < 10; i++ {
 		arg := CreateEntryParams{
-			AccountID: int64(5),
+			AccountID: int64(2),
 			Amount:    util.RandomMoney(),
 		}
 		_, err := testQueries.CreateEntry(context.Background(), arg)
 		assert.Nil(t, err)
 	}
-	testQueries.DeleteEntriesByAccount(context.Background(), int64(5))
+	testQueries.DeleteEntriesByAccount(context.Background(), int64(2))
 	arg := ListEntriesByAccountParams{
-		AccountID: int64(5),
+		AccountID: int64(2),
 		Limit:     5,
 		Offset:    5,
 	}

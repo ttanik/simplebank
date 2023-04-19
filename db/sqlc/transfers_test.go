@@ -8,10 +8,34 @@ import (
 	"github.com/ttanik/simplebank/util"
 )
 
+func createBaseAccounts(t *testing.T) {
+	arg := CreateAccountParams{
+		Owner:    util.RandomOwner(),
+		Balance:  util.RandomMoney(),
+		Currency: util.RandomCurrency(),
+	}
+	arg2 := CreateAccountParams{
+		Owner:    util.RandomOwner(),
+		Balance:  util.RandomMoney(),
+		Currency: util.RandomCurrency(),
+	}
+	account, err := testQueries.CreateAccount(context.Background(), arg)
+	account2, err2 := testQueries.CreateAccount(context.Background(), arg2)
+	assert.Nil(t, err)
+	assert.Equal(t, arg.Balance, account.Balance)
+	assert.Equal(t, arg.Owner, account.Owner)
+	assert.Equal(t, arg.Currency, account.Currency)
+	assert.Nil(t, err2)
+	assert.Equal(t, arg2.Balance, account2.Balance)
+	assert.Equal(t, arg2.Owner, account2.Owner)
+	assert.Equal(t, arg2.Currency, account2.Currency)
+}
+
 func createRandomTransfer(t *testing.T) Transfer {
+	createBaseAccounts(t)
 	arg := CreateTransferParams{
-		FromAccountID: util.RandomInt(1, 8),
-		ToAccountID:   util.RandomInt(1, 8),
+		FromAccountID: 1,
+		ToAccountID:   2,
 		Amount:        util.RandomMoney(),
 	}
 	transfer, err := testQueries.CreateTransfer(context.Background(), arg)

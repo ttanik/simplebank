@@ -9,13 +9,15 @@ import (
 )
 
 func createBaseAccounts(t *testing.T) {
+	user := createRandomUser(t)
+	user2 := createRandomUser(t)
 	arg := CreateAccountParams{
-		Owner:    util.RandomOwner(),
+		Owner:    user.Username,
 		Balance:  util.RandomMoney(),
 		Currency: util.RandomCurrency(),
 	}
 	arg2 := CreateAccountParams{
-		Owner:    util.RandomOwner(),
+		Owner:    user2.Username,
 		Balance:  util.RandomMoney(),
 		Currency: util.RandomCurrency(),
 	}
@@ -98,7 +100,7 @@ func TestListTransfer(t *testing.T) {
 func TestListTransfersByFromAccount(t *testing.T) {
 	for i := 0; i < 10; i++ {
 		arg := CreateTransferParams{
-			FromAccountID: int64(5),
+			FromAccountID: int64(7),
 			ToAccountID:   int64(6),
 			Amount:        util.RandomMoney(),
 		}
@@ -106,7 +108,7 @@ func TestListTransfersByFromAccount(t *testing.T) {
 		assert.Nil(t, err)
 	}
 	arg := ListTransfersByFromAccountParams{
-		FromAccountID: int64(5),
+		FromAccountID: int64(7),
 		Limit:         5,
 		Offset:        5,
 	}
@@ -114,14 +116,14 @@ func TestListTransfersByFromAccount(t *testing.T) {
 	assert.NoError(t, err)
 	for _, transfer := range transfers {
 		assert.NotEmpty(t, transfer)
-		assert.Equal(t, int64(5), transfer.FromAccountID)
+		assert.Equal(t, int64(7), transfer.FromAccountID)
 	}
 }
 
 func TestListTransfersByToAccount(t *testing.T) {
 	for i := 0; i < 10; i++ {
 		arg := CreateTransferParams{
-			FromAccountID: int64(5),
+			FromAccountID: int64(7),
 			ToAccountID:   int64(6),
 			Amount:        util.RandomMoney(),
 		}
@@ -137,14 +139,14 @@ func TestListTransfersByToAccount(t *testing.T) {
 	assert.NoError(t, err)
 	for _, transfer := range transfers {
 		assert.NotEmpty(t, transfer)
-		assert.Equal(t, int64(5), transfer.FromAccountID)
+		assert.Equal(t, int64(7), transfer.FromAccountID)
 	}
 }
 
 func TestListTransfersByFromAndToAccount(t *testing.T) {
 	for i := 0; i < 10; i++ {
 		arg := CreateTransferParams{
-			FromAccountID: int64(5),
+			FromAccountID: int64(7),
 			ToAccountID:   int64(6),
 			Amount:        util.RandomMoney(),
 		}
@@ -152,7 +154,7 @@ func TestListTransfersByFromAndToAccount(t *testing.T) {
 		assert.Nil(t, err)
 	}
 	arg := ListTransfersByFromAndToAccountParams{
-		FromAccountID: int64(5),
+		FromAccountID: int64(7),
 		ToAccountID:   int64(6),
 		Limit:         5,
 		Offset:        5,
@@ -161,7 +163,7 @@ func TestListTransfersByFromAndToAccount(t *testing.T) {
 	assert.NoError(t, err)
 	for _, transfer := range transfers {
 		assert.NotEmpty(t, transfer)
-		assert.Equal(t, int64(5), transfer.FromAccountID)
+		assert.Equal(t, int64(7), transfer.FromAccountID)
 		assert.Equal(t, int64(6), transfer.ToAccountID)
 	}
 }
@@ -169,16 +171,16 @@ func TestListTransfersByFromAndToAccount(t *testing.T) {
 func TestDeleteTransferByFromAccount(t *testing.T) {
 	for i := 0; i < 10; i++ {
 		arg := CreateTransferParams{
-			FromAccountID: int64(5),
+			FromAccountID: int64(7),
 			ToAccountID:   int64(6),
 			Amount:        util.RandomMoney(),
 		}
 		_, err := testQueries.CreateTransfer(context.Background(), arg)
 		assert.Nil(t, err)
 	}
-	testQueries.DeleteTransfersByFromAccount(context.Background(), int64(5))
+	testQueries.DeleteTransfersByFromAccount(context.Background(), int64(7))
 	arg := ListTransfersByFromAccountParams{
-		FromAccountID: int64(5),
+		FromAccountID: int64(7),
 		Limit:         5,
 		Offset:        5,
 	}
@@ -190,7 +192,7 @@ func TestDeleteTransferByFromAccount(t *testing.T) {
 func TestDeleteTransferByToAccount(t *testing.T) {
 	for i := 0; i < 10; i++ {
 		arg := CreateTransferParams{
-			FromAccountID: int64(5),
+			FromAccountID: int64(7),
 			ToAccountID:   int64(6),
 			Amount:        util.RandomMoney(),
 		}
@@ -211,7 +213,7 @@ func TestDeleteTransferByToAccount(t *testing.T) {
 func TestDeleteTransferByFromAndToAccount(t *testing.T) {
 	for i := 0; i < 10; i++ {
 		arg := CreateTransferParams{
-			FromAccountID: int64(5),
+			FromAccountID: int64(7),
 			ToAccountID:   int64(6),
 			Amount:        util.RandomMoney(),
 		}
@@ -219,12 +221,12 @@ func TestDeleteTransferByFromAndToAccount(t *testing.T) {
 		assert.Nil(t, err)
 	}
 	arg := DeleteTransfersByFromAccountAndToAccountParams{
-		FromAccountID: int64(5),
+		FromAccountID: int64(7),
 		ToAccountID:   int64(6),
 	}
 	testQueries.DeleteTransfersByFromAccountAndToAccount(context.Background(), arg)
 	list := ListTransfersByFromAndToAccountParams{
-		FromAccountID: int64(5),
+		FromAccountID: int64(7),
 		ToAccountID:   int64(6),
 		Limit:         5,
 		Offset:        5,
